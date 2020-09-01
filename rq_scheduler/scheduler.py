@@ -249,16 +249,19 @@ class Scheduler(object):
         return job
 
     def cron(self, cron_string, func, args=None, kwargs=None, repeat=None,
-             queue_name=None, id=None, timeout=None, description=None, meta=None, use_local_timezone=False, depends_on=None):
+             queue_name=None, id=None, timeout=None, description=None, meta=None,
+             use_local_timezone=False, depends_on=None, result_ttl=None):
         """
         Schedule a cronjob
         """
         scheduled_time = get_next_scheduled_time(cron_string, use_local_timezone=use_local_timezone)
 
-        # Set result_ttl to -1, as jobs scheduled via cron are periodic ones.
+        # Set result_ttl to -1 if not specified, as jobs scheduled via cron are periodic ones.
         # Otherwise the job would expire after 500 sec.
+        if result_ttl is None:
+            result_ttl = -1
         job = self._create_job(func, args=args, kwargs=kwargs, commit=False,
-                               result_ttl=-1, id=id, queue_name=queue_name,
+                               result_ttl=result_ttl, id=id, queue_name=queue_name,
                                description=description, timeout=timeout, meta=meta, depends_on=depends_on)
 
         job.meta['cron_string'] = cron_string

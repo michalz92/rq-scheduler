@@ -137,7 +137,8 @@ This is how you do it
         repeat=10,                  # Repeat this number of times (None means repeat forever)
         queue_name=queue_name,      # In which queue the job should be put in
         meta={'foo': 'bar'},        # Arbitrary pickleable data on the job itself
-        use_local_timezone=False    # Interpret hours in the local timezone
+        use_local_timezone=False,   # Interpret hours in the local timezone
+        result_ttl=None,            # How long (in seconds) successful jobs and their results are kept (None means forever)
     )
 
 -------------------------
