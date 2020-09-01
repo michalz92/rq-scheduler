@@ -138,8 +138,12 @@ This is how you do it
         queue_name=queue_name,      # In which queue the job should be put in
         meta={'foo': 'bar'},        # Arbitrary pickleable data on the job itself
         use_local_timezone=False,   # Interpret hours in the local timezone
-        result_ttl=None,            # How long (in seconds) successful jobs and their results are kept (None means forever)
+        result_ttl=None,            # How long (in seconds) successful jobs and their results are kept (None means forever)*
     )
+
+*If you set up a repeated job, you must make sure that you either do not set a result_ttl value
+or you set a value larger than the interval.
+Otherwise, the entry with the job details will expire and the job will not get re-scheduled.
 
 -------------------------
 Retrieving scheduled jobs
